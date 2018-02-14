@@ -6,6 +6,8 @@ import math
 import time
 import os
 import psutil
+import sys
+import ast
 
 class SwitchDirection:
     UP = 'Up'
@@ -132,17 +134,18 @@ class Board:
         for i in range (0,len(self.items)):
            row.append(self.items[i])
            if (i + 1) % self.dim == 0:
-               self.matrix.append(row)
+               self.matrix.append(row)              
                row = []           
             
         return self.matrix
     
     def printMatrix(self, header):
         matrix = self.getMatrix()
+        print(matrix)
         if not header is None:
             print(header)
         for row in matrix:
-            print(row)           
+            print(row)
 
     def clone(self):
         return Board(*self.items)
@@ -217,7 +220,8 @@ class Solver:
         self.board_tree = BoardTree(self.board_start, self.board_goal)
         self.running_start = time.time()
         self.running_end = None
-        
+#        self.board_start.printMatrix('board_start')
+#        self.board_goal.printMatrix('board_goal')
                      
     def run_algorithm(self):
         self.board_tree.performBFS(self.board_start)
@@ -241,16 +245,23 @@ class Solver:
         value_list.append('search_depth: {}'.format(len(self.board_tree.success_path)-1))
         value_list.append('max_search_depth: {}'.format(self.board_tree.max_search_depth))
         value_list.append('running_time: {0:9.8f}'.format(self.running_start - self.running_end))
-        value_list.append('max_ram_usage: {0:9.8f}'.format(self.get_max_ram_usage()))   
+        value_list.append('max_ram_usage: {0:9.8f}'.format(self.get_max_ram_usage()/(10**6 * 8)))   
         return value_list
         
     def get_max_ram_usage(self):
         process = psutil.Process(os.getpid())
 #        return process.memory_info().rss
         return process.memory_info()[0] # float(2 ** 20)
+
+if 'python.exe' in sys.executable: #started from command prompt
+    type = sys.argv[1].upper()
+    args = ast.literal_eval(sys.argv[2]) # ast.literal_eval splits the string into a tuple
+else:  
+    type = 'BFS'
+    args = (1,2,5,3,4,0,6,7,8)
+    #args = (0,8,7,6,5,4,3,2,1)
     
-args = (1,2,5,3,4,0,6,7,8)
-solver = Solver('BFS', *args)
+solver = Solver(type, *args)
 solver.run_algorithm()
 solver.print_results()
 solver.write_results()
