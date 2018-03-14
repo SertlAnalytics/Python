@@ -5,7 +5,7 @@
 import math
 import time
 import os
-import psutil
+# import psutil
 import sys
 import ast
 import random
@@ -38,8 +38,10 @@ class Stack: #Last in - first out LIFO
 
     def size(self):
         return len(self.items)
-     
-class Queue: #First in - first out FIFO
+
+
+class Queue:  # First in - first out FIFO
+
     def __init__(self):
         self.items = []
    
@@ -57,8 +59,10 @@ class Queue: #First in - first out FIFO
         
     def size(self):
         return len(self.items)
-    
+
+
 class BoardTree:
+
     def __init__(self, initial_board, goal_board):
         self.initial_board = initial_board
         self.goal_board = goal_board
@@ -69,7 +73,7 @@ class BoardTree:
         self.nodes_expanded = 0
         self.max_search_depth = 0
     
-    def performBFS(self, input_board): #QUEUE: FIRST IN FIRST OUT (FIFO)
+    def performBFS(self, input_board):  #  QUEUE: FIRST IN FIRST OUT (FIFO)
         frontier = Queue()        
         frontier.enqueue(input_board)
         self.frontier_items.append(input_board.items)
@@ -97,7 +101,7 @@ class BoardTree:
                     frontier.enqueue(neighbors)
                     self.frontier_items.append(neighbors.items)
    
-    def performDFS(self, input_board): #STACK: LAST IN FIRST OUT (LIFO)
+    def performDFS(self, input_board):  # STACK: LAST IN FIRST OUT (LIFO)
         frontier = Stack()        
         frontier.push(input_board)
         self.frontier_items.append(input_board.items)
@@ -178,8 +182,10 @@ class BoardTree:
             success_path_inverted.append(parent_board)
             parent_board = parent_board.parent_board
         return success_path_inverted[::-1] #.reverse()
-    
+
+
 class Board_Helper:
+
     def __init__(self, dim):        
         self.dim = dim
         self.number_mapping = []
